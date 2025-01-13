@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://thymeleaf.org/extras/spring-security5"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}">
+</head>
+<body>
+<section layout:fragment="content">
+
+<div class = "container">
+    <div class="panel panel-primary">
+        <div class="panel-heading"> Liste des contacts</div>
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <th>Id</th> <th>Nom</th> <th>Prenom</th> <th>Email</th> <th>Adresse</th> <th>Telephone</th> <th>Type</th>
+                </tr>
+                <tr th:each="a:${listContacts}">
+                    <td th:text="${a.id}"></td>
+                    <td th:text="${a.lastName}"></td>
+                    <td th:text="${a.firstName}"></td>
+                    <td th:text="${a.email}"></td>
+                    <td th:text="${a.address}"></td>
+                    <td th:text="${a.phone}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</section>
+</body>
+</html>
