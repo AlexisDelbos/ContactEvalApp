@@ -5,32 +5,64 @@
       xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}">
+    <title>Liste des contacts</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<section layout:fragment="content">
+<div layout:fragment="content" class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Saisir nouveau contact</h5>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/save}" method="post" th:object="${contact}">
 
-<div class = "container">
-    <div class="panel panel-primary">
-        <div class="panel-heading"> Liste des contacts</div>
-        <div class="panel-body">
-            <table class="table">
-                <tr>
-                    <th>Id</th> <th>Nom</th> <th>Prenom</th> <th>Email</th> <th>Adresse</th> <th>Telephone</th> <th>Type</th>
-                </tr>
-                <tr th:each="a:${listContacts}">
-                    <td th:text="${a.id}"></td>
-                    <td th:text="${a.lastName}"></td>
-                    <td th:text="${a.firstName}"></td>
-                    <td th:text="${a.email}"></td>
-                    <td th:text="${a.address}"></td>
-                    <td th:text="${a.phone}"></td>
-                </tr>
-            </table>
+                        <div class="form-group">
+                            <label class="control-label" for="lastname">Nom :</label>
+                            <input class="form-control" type="text" name="lastname" id="lastname" th:value="${contact.lastName}">
+                            <span th:errors="${contact.lastName}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="firstname">Prénom :</label>
+                            <input class="form-control" type="text" name="firstname" id="firstname" th:value="${contact.firstName}">
+                            <span th:errors="${contact.firstName}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="email">Mail :</label>
+                            <input class="form-control" type="email" name="email" id="email" th:value="${contact.email}">
+                            <span th:errors="${contact.email}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="phone">Téléphone :</label>
+                            <input class="form-control" type="text" name="phone" id="phone" th:value="${contact.phone}">
+                            <span th:errors="${contact.phone}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="address">Adresse :</label>
+                            <input class="form-control" type="text" name="address" id="address" th:value="${contact.address}">
+                            <span th:errors="${contact.address}" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="typeContact">Type de Contact :</label>
+                            <select name="typeContact" id="typeContact" class="form-control">
+                                <option th:each="typeContact : ${typeContacts}" th:value="${typeContact.name}" th:text="${typeContact.name}"></option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Sauvegarder</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-</section>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 package fr.fms.entities;
 
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jdk.jfr.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class Contact implements Serializable {
 
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
+
 
     String lastName;
     String firstName;

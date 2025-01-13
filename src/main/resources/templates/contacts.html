@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" layout:decorate="~{layout.html}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://thymeleaf.org/extras/spring-security5"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des contacts</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <nav class="navbar w-50 ps-5">
+        <ul class="d-flex list-unstyled mb-0">
+            <li class="me-5" th:each="typeContact : ${listTypeContacts}">
+                <a class="btn"
+                   th:class="${typeContact.id == id} ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                   th:href="@{/typeContact(id=${typeContact.id})}" th:text="${typeContact.name}"></a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container border border-primary  rounded mt-4">
+        <div class="p-3 mb-2 bg-primary text-white w-100">
+            Liste des articles
+        </div>
+        <div class="badge  text-bg-secondary" th:text="${successDeleted}"></div>
+        <div class="badge text-bg-danger" th:text="${articlesNotFound}"></div>
+        <div>
+            <form method="get" th:action="@{/index}">
+                <label>Rechercher : </label>
+                <input name="keyword" placeholder="Nom" th:value="${keyword}" type="text">
+                <button class="btn btn-primary" type="submit">🔍</button>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped w-100">
+                <thead class="thead-light">
+                <tr>
+                    <th>Id</th> <th>Nom</th> <th>Prenom</th> <th>Email</th> <th>Adresse</th> <th>Telephone</th> <th>Type</th>
+                </tr>
+                </thead>
+                <tr th:each="a:${listContacts}">
+                    <td th:text="${a.id}"></td>
+                    <td th:text="${a.lastName}"></td>
+                    <td th:text="${a.firstName}"></td>
+                    <td th:text="${a.email}"></td>
+                    <td th:text="${a.address}"></td>
+                    <td th:text="${a.phone}"></td>
+                    <td th:text="${a.typeContact.name}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <ul class="nav nav-pills">
+            <li th:class="${currentPage == page} ? 'active' : ''" th:each="page : ${page}">
+                <a class="nav-link" th:href="@{/index(page=${page}, keyword=${keyword})}" th:text="${page + 1}"></a>
+            </li>
+        </ul>
+    </div>
+</section>
+</body>
+</html>

@@ -1,24 +1,36 @@
 package fr.fms.web;
 
+import fr.fms.business.IBusinessImpl;
 import fr.fms.dao.ContactRepository;
 import fr.fms.dao.TypeContactRepository;
 import fr.fms.entities.Contact;
 import fr.fms.entities.TypeContact;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class ContactController {
 
     @Autowired
-    private ContactRepository contactRepository;
+    IBusinessImpl businessImpl;
+    private final Logger logger = LoggerFactory.getLogger(ContactController.class);
 
-    @Autowired
-    private TypeContactRepository typeContactRepository;
 
     @GetMapping("/403")
     public String error() {
@@ -26,10 +38,51 @@ public class ContactController {
     }
 
     @GetMapping("/index")
-    public String index(Model model) {
-        List<Contact> contacts = contactRepository.findAll();
-        model.addAttribute("listContacts", contacts);
+    public String index(Model model,
+                        @RequestParam(name = "page", defaultValue = "0") int page,
+                        @RequestParam(name = "keyword", defaultValue = "") String kw) throws Exception {
+
+
+        Page<Contact> contacts = businessImpl.getContacts(kw, page);
+        model.addAttribute("listContacts", contacts.getContent());
+        model.addAttribute("page", IntStream.range(0, contacts.getTotalPages()).boxed().collect(Collectors.toList()));
+        model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", kw);
+        List<TypeContact> typeContacts = businessImpl.getTypeContacts();
+        model.addAttribute("listTypeContacts", typeContacts);
+        return "contacts";
+    }
+
+    @PostMapping({"/save"})
+    public String save(Model model, @Valid Contact contact, BindingResult bindingResult, RedirectAttributes redirectAttrs) throws Exception {
+        try {
+            if(bindingResult.hasErrors()) {
+                model.addAttribute("typeContact",businessImpl.getTypeContacts());
+                return "contact";
+            }
+            businessImpl.createOneContact(contact);
+        }
+        catch(Exception e) {
+            redirectAttrs.addAttribute("error",e.getMessage());
+            logger.error("[Contact CONTROLLER : SAVE ARTICLE] : {} " , e.getMessage());
+        }
+        return "redirect:/index";
+    }
+
+    @GetMapping("/contact")
+    public String contact(Model model) {
+        model.addAttribute("contact", new Contact());
+        try {
+            model.addAttribute("typeContact", businessImpl.getTypeContacts());
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            logger.error("[Contact CONTROLLER : MANAGE NEW ARTICLE] : {} ", e.getMessage());
+        }
         return "contact";
     }
+
+
+
+
 
 }
