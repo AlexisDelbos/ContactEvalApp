@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,21 +29,16 @@ public class TypeContactController {
     private final Logger logger = LoggerFactory.getLogger(TypeContactController.class);
 
     @GetMapping("/contactByTypeContact")
-    public String contactByTypeContact(
-            @RequestParam(name = "id") Long id,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "keyword", defaultValue = "") String kw,
-            Model model) throws Exception {
+    public String getArticlesByCategory(@RequestParam Long id, Model model,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "5") int size) throws Exception {
 
-        Page<Contact> contacts = businessImpl.getContactsByTypeContact(id, page);
-        model.addAttribute("listContacts", contacts.getContent());
-        model.addAttribute("page", IntStream.range(0, contacts.getTotalPages()).boxed().collect(Collectors.toList()));
-        model.addAttribute("currentPage", page);
-        model.addAttribute("keyword", kw);
-
-        List<TypeContact> typeContacts = businessImpl.getTypeContacts();
-        model.addAttribute("listTypeContacts", typeContacts);
-
+        //Page<Contact> testTypeContact = businessImpl.getContactsByTypeContact(id, page);
+        Page<Contact> typeContact = businessImpl.findByTypeContact(id, page);
+        List<TypeContact> contacts = businessImpl.getTypeContacts();
+        model.addAttribute("listContacts", typeContact);
+        model.addAttribute("listTypeContacts", contacts);
+        model.addAttribute("idTypeContact", id);
         return "contacts";
     }
 

@@ -33,11 +33,16 @@ public class IBusinessImpl implements IBusiness{
         return contactRepository.findByLastNameContains(kw , PageRequest.of(page, 5));
     }
 
+    @Override
+    public Page<Contact> findByTypeContact(Long typeContactId, int page) {
+        return contactRepository.findByTypeContact_Id(typeContactId, PageRequest.of(page, 5));
+    }
+
 
 
     @Override
-    public Page<Contact> getContactsByTypeContact(Long id, int page) throws Exception {
-        return contactRepository.findByTypeContact(id, PageRequest.of(page, 5));
+    public Page<Contact> getContactsByTypeContact(Long id, int page,int size) {
+        return contactRepository.findByTypeContact_Id(id, PageRequest.of(page, 5));
     }
 
     public List<TypeContact> getTypeContacts() throws Exception {
@@ -45,9 +50,8 @@ public class IBusinessImpl implements IBusiness{
     }
 
     @Override
-    public Contact getOneContact(Long id) throws Exception {
-        Optional<Contact> optional = contactRepository.findById(id);
-        return optional.isPresent() ? optional.get() : null;
+    public Optional<Contact> getOneContact(Long id) {
+        return contactRepository.findById(id);
     }
 
     @Override

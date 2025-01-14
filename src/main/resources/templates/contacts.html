@@ -13,8 +13,9 @@
         <ul class="d-flex list-unstyled mb-0">
             <li class="me-5" th:each="typeContact : ${listTypeContacts}">
                 <a class="btn"
-                   th:class="${typeContact.id == id} ? 'btn btn-primary' : 'btn btn-outline-primary'"
-                   th:href="@{/typeContact(id=${typeContact.id})}" th:text="${typeContact.name}"></a>
+                   th:class="${typeContact.id == typeContactId} ? 'btn btn-primary' : 'btn btn-outline-primary'"
+                   th:href="@{/index(typeContactId=${typeContact.id})}"
+                   th:text="${typeContact.name}"></a>
             </li>
         </ul>
     </nav>
@@ -53,8 +54,11 @@
             </table>
         </div>
         <ul class="nav nav-pills">
-            <li th:class="${currentPage == page} ? 'active' : ''" th:each="page : ${page}">
-                <a class="nav-link" th:href="@{/index(page=${page}, keyword=${keyword})}" th:text="${page + 1}"></a>
+            <li th:class="${currentPage == status.index} ? 'active' : ''"
+                th:each="page, status : ${pages}">
+                <a class="nav-link"
+                   th:href="@{/index(page=${status.index}, keyword=${keyword}, typeContactId=${typeContactId})}"
+                   th:text="${status.index + 1}"></a>
             </li>
         </ul>
     </div>

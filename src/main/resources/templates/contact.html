@@ -19,21 +19,23 @@
                 <div class="card-body">
                     <form th:action="@{/save}" method="post" th:object="${contact}">
 
+                        <input name="id" th:value="${contact.id} ? ${contact.id} : null" type="hidden"/>
+
                         <div class="form-group">
-                            <label class="control-label" for="lastname">Nom :</label>
-                            <input class="form-control" type="text" name="lastname" id="lastname" th:value="${contact.lastName}">
+                            <label class="control-label" for="lastName">Nom :</label>
+                            <input class="form-control" type="text" name="lastName" id="lastName" th:value="${contact.lastName}">
                             <span th:errors="${contact.lastName}" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label" for="firstname">Prénom :</label>
-                            <input class="form-control" type="text" name="firstname" id="firstname" th:value="${contact.firstName}">
+                            <label class="control-label" for="firstName">Prénom :</label>
+                            <input class="form-control" type="text" name="firstName" id="firstName" th:value="${contact.firstName}">
                             <span th:errors="${contact.firstName}" class="text-danger"></span>
                         </div>
 
                         <div class="form-group">
                             <label class="control-label" for="email">Mail :</label>
-                            <input class="form-control" type="email" name="email" id="email" th:value="${contact.email}">
+                            <input class="form-control" type="text" name="email" id="email" th:value="${contact.email}">
                             <span th:errors="${contact.email}" class="text-danger"></span>
                         </div>
 
@@ -52,9 +54,13 @@
                         <div class="form-group">
                             <label for="typeContact">Type de Contact :</label>
                             <select name="typeContact" id="typeContact" class="form-control">
-                                <option th:each="typeContact : ${typeContacts}" th:value="${typeContact.name}" th:text="${typeContact.name}"></option>
+                                <option th:each="typeContact : ${typeContacts}"
+                                        th:value="${typeContact.id}"
+                                        th:text="${typeContact.name}">
+                                </option>
                             </select>
                         </div>
+
 
                         <button type="submit" class="btn btn-primary btn-block">Sauvegarder</button>
                     </form>

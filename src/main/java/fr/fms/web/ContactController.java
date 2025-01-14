@@ -40,12 +40,19 @@ public class ContactController {
     @GetMapping("/index")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
-                        @RequestParam(name = "keyword", defaultValue = "") String kw) throws Exception {
+                        @RequestParam(name = "keyword", defaultValue = "") String kw,
+                        @RequestParam(name = "typeContactId", required = false) Long typeContactId) throws Exception {
 
+        Page<Contact> contacts;
+        if (typeContactId != null) {
+            contacts = businessImpl.findByTypeContact(typeContactId, page);
+            model.addAttribute("typeContactId", typeContactId);
+        } else {
+            contacts = businessImpl.getContacts(kw, page);
+        }
 
-        Page<Contact> contacts = businessImpl.getContacts(kw, page);
         model.addAttribute("listContacts", contacts.getContent());
-        model.addAttribute("page", IntStream.range(0, contacts.getTotalPages()).boxed().collect(Collectors.toList()));
+        model.addAttribute("pages", IntStream.range(0, contacts.getTotalPages()).boxed().collect(Collectors.toList()));
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", kw);
         List<TypeContact> typeContacts = businessImpl.getTypeContacts();
@@ -53,33 +60,42 @@ public class ContactController {
         return "contacts";
     }
 
-    @PostMapping({"/save"})
-    public String save(Model model, @Valid Contact contact, BindingResult bindingResult, RedirectAttributes redirectAttrs) throws Exception {
-        try {
-            if(bindingResult.hasErrors()) {
-                model.addAttribute("typeContact",businessImpl.getTypeContacts());
-                return "contact";
-            }
-            businessImpl.createOneContact(contact);
+
+    @PostMapping({"/save", "/save/{id}"})
+    public String save(Model model, @Valid Contact contact, BindingResult bindingResult, @PathVariable(required = false) Long id) throws Exception {
+        if (bindingResult.hasErrors()) {
+            List<TypeContact> typeContacts = businessImpl.getTypeContacts();
+            model.addAttribute("typeContacts", typeContacts);
+            return "contact";
         }
-        catch(Exception e) {
-            redirectAttrs.addAttribute("error",e.getMessage());
-            logger.error("[Contact CONTROLLER : SAVE ARTICLE] : {} " , e.getMessage());
-        }
+        if (id != null) {
+            businessImpl.getOneContact(id).ifPresent(contactUpdate -> {
+                contactUpdate.setLastName(contact.getLastName());
+                contactUpdate.setFirstName(contact.getFirstName());
+                contactUpdate.setEmail(contact.getEmail());
+                contactUpdate.setPhone(contact.getPhone());
+                contactUpdate.setAddress(contact.getAddress());
+                contactUpdate.setTypeContact(contact.getTypeContact());
+                businessImpl.createOneContact(contactUpdate);
+            });
+        } else businessImpl.createOneContact(contact);
         return "redirect:/index";
     }
+
+
 
     @GetMapping("/contact")
     public String contact(Model model) {
         model.addAttribute("contact", new Contact());
         try {
-            model.addAttribute("typeContact", businessImpl.getTypeContacts());
+            model.addAttribute("typeContacts", businessImpl.getTypeContacts());
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             logger.error("[Contact CONTROLLER : MANAGE NEW ARTICLE] : {} ", e.getMessage());
         }
         return "contact";
     }
+
 
 
 

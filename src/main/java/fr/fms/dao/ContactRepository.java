@@ -5,12 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 
 public interface ContactRepository extends JpaRepository<Contact, Long> {
     public Page<Contact> findAll(Pageable pageable);
 
     public Page<Contact> findByLastNameContains(String lastname , Pageable pageable);
-    public Page<Contact> findByTypeContact(Long id , Pageable pageable);
+    Page<Contact> findByTypeContact_Id(Long typeContactId, Pageable pageable); // Updated method
 
-    Long id(Long id);
+
 }
