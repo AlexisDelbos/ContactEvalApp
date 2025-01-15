@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class IBusinessImpl implements IBusiness{
+public class IBusinessImpl implements IBusiness {
     @Autowired
     ContactRepository contactRepository;
 
@@ -30,7 +30,7 @@ public class IBusinessImpl implements IBusiness{
 
     @Override
     public Page<Contact> getContacts(String kw, int page) throws Exception {
-        return contactRepository.findByLastNameContains(kw , PageRequest.of(page, 5));
+        return contactRepository.findByLastNameContains(kw, PageRequest.of(page, 5));
     }
 
     @Override
@@ -39,13 +39,12 @@ public class IBusinessImpl implements IBusiness{
     }
 
 
-
     @Override
-    public Page<Contact> getContactsByTypeContact(Long id, int page,int size) {
+    public Page<Contact> getContactsByTypeContact(Long id, int page, int size) {
         return contactRepository.findByTypeContact_Id(id, PageRequest.of(page, 5));
     }
 
-    public List<TypeContact> getTypeContacts() throws Exception {
+    public List<TypeContact> getTypeContacts() {
         return typeContactRepository.findAll();
     }
 
@@ -58,4 +57,10 @@ public class IBusinessImpl implements IBusiness{
     public void createOneContact(Contact contact) {
         contactRepository.save(contact);
     }
+
+    @Override
+    public void deleteContact(Long id) throws Exception {
+        contactRepository.deleteById(id);
+    }
+
 }
