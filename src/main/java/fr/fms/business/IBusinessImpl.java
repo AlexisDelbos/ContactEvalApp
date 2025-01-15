@@ -38,6 +38,9 @@ public class IBusinessImpl implements IBusiness {
         return contactRepository.findByTypeContact_Id(typeContactId, PageRequest.of(page, 5));
     }
 
+    public List<Contact> findByTypeContact(TypeContact typeContact) {
+        return contactRepository.findByTypeContact(typeContact);
+    }
 
     @Override
     public Page<Contact> getContactsByTypeContact(Long id, int page, int size) {

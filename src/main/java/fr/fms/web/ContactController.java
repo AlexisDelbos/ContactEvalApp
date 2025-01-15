@@ -86,15 +86,20 @@ public class ContactController {
     }
 
     @GetMapping("/edit")
-    public String edit(Long id, Model model) {
-        Optional<Contact> contact;
+    public String edit(@RequestParam Long id, Model model) {
         try {
-            contact = businessImpl.getOneContact(id);
-            model.addAttribute("categories", businessImpl.getTypeContacts());
-            model.addAttribute("article", contact);
+            Optional<Contact> contactOpt = businessImpl.getOneContact(id);
+            if (contactOpt.isPresent()) {
+                model.addAttribute("contact", contactOpt.get());
+                model.addAttribute("typeContacts", businessImpl.getTypeContacts());
+            } else {
+                model.addAttribute("error", "Contact non trouvé");
+                return "redirect:/index";
+            }
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             logger.error("[Contact CONTROLLER : EDIT] : {} ", e.getMessage());
+            return "redirect:/index";
         }
         return "edit";
     }

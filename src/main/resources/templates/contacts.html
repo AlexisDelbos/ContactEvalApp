@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" layout:decorate="~{layout.html}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://thymeleaf.org/extras/spring-security5"
       xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -9,65 +8,95 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <nav class="navbar w-50 ps-5">
-        <ul class="d-flex list-unstyled mb-0">
-            <li class="me-5" th:each="typeContact : ${listTypeContacts}">
-                <a class="btn"
-                   th:class="${typeContact.id == typeContactId} ? 'btn btn-primary' : 'btn btn-outline-primary'"
-                   th:href="@{/index(typeContactId=${typeContact.id})}"
-                   th:text="${typeContact.name}"></a>
-            </li>
-        </ul>
-    </nav>
 
-    <div class="container border border-primary  rounded mt-4">
-        <div class="p-3 mb-2 bg-primary text-white w-100">
-            Liste des articles
-        </div>
-        <div class="badge  text-bg-secondary" th:text="${successDeleted}"></div>
-        <div class="badge text-bg-danger" th:text="${articlesNotFound}"></div>
-        <div>
-            <form method="get" th:action="@{/index}">
-                <label>Rechercher : </label>
-                <input name="keyword" placeholder="Nom" th:value="${keyword}" type="text">
-                <button class="btn btn-primary" type="submit">🔍</button>
-            </form>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped w-100">
-                <thead class="thead-light">
-                <tr>
-                    <th>Id</th> <th>Nom</th> <th>Prenom</th> <th>Email</th> <th>Adresse</th> <th>Telephone</th> <th>Type</th>
-                </tr>
-                </thead>
-                <tr th:each="a:${listContacts}">
-                    <td th:text="${a.id}"></td>
-                    <td th:text="${a.lastName}"></td>
-                    <td th:text="${a.firstName}"></td>
-                    <td th:text="${a.email}"></td>
-                    <td th:text="${a.address}"></td>
-                    <td th:text="${a.phone}"></td>
-                    <td th:text="${a.typeContact.name}"></td>
+    <div class="container mt-4">
+        <nav class="nav-pills">
+            <ul class="d-flex list-unstyled gap-3">
+                <li th:each="typeContact : ${listTypeContacts}">
+                    <a class="btn btn-lg"
+                       th:class="${typeContact.id == typeContactId} ? 'btn btn-primary shadow' : 'btn btn-outline-primary'"
+                       th:href="@{/index(typeContactId=${typeContact.id})}"
+                       th:text="${typeContact.name}"></a>
+                </li>
+            </ul>
+        </nav>
 
-                    <td>
-                        <a class="btn btn-danger" onclick="return confirm('Etes vous sur de supprimer ce contact ?')" th:href="@{ /delete (id=${a.id} , page=${currentPage} , keyword=${keyword} , idTypeContact=${idTypeContact} ) }" >Supprimer </a>
-                    </td>
+        <!-- Card principale -->
+        <div class="card mt-4 shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">Liste des articles</h5>
+            </div>
 
-                    <td>
-                        <a class="btn btn-info" th:href="@{ /edit (id=${a.id}) }" >Edit</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <!-- Alertes -->
+            <div class="card-body">
+                <div class="alert alert-success" th:if="${successDeleted}" th:text="${successDeleted}"></div>
+                <div class="alert alert-danger" th:if="${articlesNotFound}" th:text="${articlesNotFound}"></div>
+
+                <form class="mb-4" method="get" th:action="@{/index}">
+                    <div class="input-group">
+                        <input class="form-control" name="keyword" placeholder="Rechercher par nom..."
+                               th:value="${keyword}"
+                               type="text">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Id</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Email</th>
+                            <th>Adresse</th>
+                            <th>Téléphone</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="a:${listContacts}">
+                            <td th:text="${a.id}"></td>
+                            <td th:text="${a.lastName}"></td>
+                            <td th:text="${a.firstName}"></td>
+                            <td th:text="${a.email}"></td>
+                            <td th:text="${a.address}"></td>
+                            <td th:text="${a.phone}"></td>
+                            <td>
+                                <span class="badge bg-info" th:text="${a.typeContact.name}"></span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-sm btn-info me-2" th:href="@{/edit (id=${a.id})}">
+                                        <i class="bi bi-pencil"></i> Modifier
+                                    </a>
+                                    <a class="btn btn-sm btn-danger"
+                                       onclick="return confirm('Etes vous sûr de vouloir supprimer ce contact ?')"
+                                       th:href="@{/delete(id=${a.id},page=${currentPage},keyword=${keyword},idTypeContact=${idTypeContact})}">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <nav aria-label="Page navigation" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li th:class="'page-item ' + ${currentPage == status.index ? 'active' : ''}"
+                            th:each="page, status : ${pages}">
+                            <a class="page-link"
+                               th:href="@{/index(page=${status.index},keyword=${keyword},typeContactId=${typeContactId})}"
+                               th:text="${status.index + 1}"></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
-        <ul class="nav nav-pills">
-            <li th:class="${currentPage == status.index} ? 'active' : ''"
-                th:each="page, status : ${pages}">
-                <a class="nav-link"
-                   th:href="@{/index(page=${status.index}, keyword=${keyword}, typeContactId=${typeContactId})}"
-                   th:text="${status.index + 1}"></a>
-            </li>
-        </ul>
     </div>
 </section>
 </body>

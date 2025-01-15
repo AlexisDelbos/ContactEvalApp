@@ -6,62 +6,117 @@
     <meta charset="UTF-8">
     <title>Liste des contacts</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-4" layout:fragment="content">
+<div class="container mt-5" layout:fragment="content">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow border-primary">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">Mettre à jour un contact</h5>
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-user-edit me-2"></i>
+                        Mettre à jour contact
+                    </h4>
                 </div>
-                <div class="card-body">
-                    <form method="post" th:action="@{/save}">
-
-                        <div class="form-group">
-                            <label class="control-label"> Id : </label> <label th:text=${contact.id}></label>
+                <div class="card-body bg-light">
+                    <form class="p-3" method="post" th:action="@{/save}">
+                        <div class="alert alert-info mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            ID Contact : <strong th:text=${contact.id}></strong>
                             <input class="form-control" name="id" th:value="${contact.id}" type="hidden">
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Nom :</label>
-                            <input class="form-control" name="lastName" th:value="${contact.lastName}" type="text">
-                            <span class="text-danger" th:errors="${contact.lastName}"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Prénom :</label>
-                            <input class="form-control" name="firstName" th:value="${contact.firstName}" type="text">
-                            <span class="text-danger" th:errors="${contact.firstName}"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Mail :</label>
-                            <input class="form-control" name="email" th:value="${contact.email}" type="text">
-                            <span class="text-danger" th:errors="${contact.email}"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Téléphone :</label>
-                            <input class="form-control" name="phone" th:value="${contact.phone}" type="text">
-                            <span class="text-danger" th:errors="${contact.phone}"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Adresse :</label>
-                            <input class="form-control" name="address" th:value="${contact.address}" type="text">
-                            <span class="text-danger" th:errors="${contact.address}"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Type de Contact :</label>
-                            <select class="form-control" name="typeContact">
-                                <option th:each="typeContact : ${typeContacts}"
-                                        th:text="${typeContact.name}"
-                                        th:value="${typeContact.id}">
-                                </option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-user me-2"></i>Nom
+                                    </label>
+                                    <input class="form-control form-control-lg shadow-sm"
+                                           name="lastName"
+                                           placeholder="Entrez le nom"
+                                           th:value="${contact.lastName}"
+                                           type="text">
+                                    <span class="text-danger small" th:errors="${contact.lastName}"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-user me-2"></i>Prénom
+                                    </label>
+                                    <input class="form-control form-control-lg shadow-sm"
+                                           name="firstName"
+                                           placeholder="Entrez le prénom"
+                                           th:value="${contact.firstName}"
+                                           type="text">
+                                    <span class="text-danger small" th:errors="${contact.firstName}"></span>
+                                </div>
+                            </div>
                         </div>
 
+                        <div class="mb-4">
+                            <div class="form-group">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-envelope me-2"></i>Email
+                                </label>
+                                <input class="form-control form-control-lg shadow-sm"
+                                       name="email"
+                                       placeholder="exemple@email.com"
+                                       th:value="${contact.email}"
+                                       type="email">
+                                <span class="text-danger small" th:errors="${contact.email}"></span>
+                            </div>
+                        </div>
 
-                        <button class="btn btn-primary btn-block" type="submit">Editer</button>
+                        <div class="mb-4">
+                            <div class="form-group">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-phone me-2"></i>Téléphone
+                                </label>
+                                <input class="form-control form-control-lg shadow-sm"
+                                       name="phone"
+                                       placeholder="01 23 45 67 89"
+                                       th:value="${contact.phone}"
+                                       type="tel">
+                                <span class="text-danger small" th:errors="${contact.phone}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-group">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Adresse
+                                </label>
+                                <input class="form-control form-control-lg shadow-sm"
+                                       name="address"
+                                       placeholder="Entrez l'adresse complète"
+                                       th:value="${contact.address}"
+                                       type="text">
+                                <span class="text-danger small" th:errors="${contact.address}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-group">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-tags me-2"></i>Type de Contact
+                                </label>
+                                <select class="form-control form-control-lg shadow-sm" name="typeContact">
+                                    <option th:each="typeContact : ${typeContacts}"
+                                            th:text="${typeContact.name}"
+                                            th:value="${typeContact.id}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary btn-lg" type="submit">
+                                <i class="fas fa-save me-2"></i>Mettre à jour
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -69,5 +124,8 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
