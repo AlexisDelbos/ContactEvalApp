@@ -15,7 +15,6 @@ public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-
         return "login";
     }
 
@@ -32,4 +31,6 @@ public class LoginController {
     public String redirectToLandingPage() {
         return "landingpage";
     }
+
+
 }

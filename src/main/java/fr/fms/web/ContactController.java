@@ -33,7 +33,7 @@ public class ContactController {
         return "403";
     }
 
-    @GetMapping("/index")
+    @GetMapping({"/index", "/"})
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "keyword", defaultValue = "") String kw,
