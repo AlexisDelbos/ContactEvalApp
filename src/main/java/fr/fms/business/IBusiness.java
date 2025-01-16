@@ -15,15 +15,15 @@ public interface IBusiness {
 
     Page<Contact> getContacts(String kw, int page) throws Exception;
 
-    Page<Contact> findByTypeContact(Long typeContactId, int page);
+    Page<Contact> findByTypeContact(Long typeContactId, int page) throws Exception;
 
-    Page<Contact> getContactsByTypeContact(Long typeContactId, int page, int size);
+    Page<Contact> getContactsByTypeContact(Long typeContactId, int page, int size) throws Exception;
 
     List<TypeContact> getTypeContacts() throws Exception;
 
-    Optional<Contact> getOneContact(Long id);
+    Optional<Contact> getOneContact(Long id) throws Exception;
 
-    void createOneContact(Contact contact);
+    void createOneContact(Contact contact) throws Exception;
 
     void deleteContact(Long id) throws Exception;
 }

@@ -1,10 +1,8 @@
 package fr.fms.web;
 
 import fr.fms.business.IBusinessImpl;
-import fr.fms.dao.TypeContactRepository;
 import fr.fms.entities.Contact;
 import fr.fms.entities.TypeContact;
-import fr.fms.exceptions.ManageErrors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +12,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Controller
 public class TypeContactController {
 
+    private final Logger logger = LoggerFactory.getLogger(TypeContactController.class);
     @Autowired
     IBusinessImpl businessImpl;
 
-    private final Logger logger = LoggerFactory.getLogger(TypeContactController.class);
-
+    /**
+     * Récupère et affiche les contacts filtrés par type de contact
+     *
+     * @param id    l'identifiant du type de contact
+     * @param model le modèle Spring MVC
+     * @param page  le numéro de la page courante (par défaut 0)
+     * @param size  le nombre d'éléments par page (par défaut 5)
+     * @return la vue "contacts" avec la liste des contacts filtrée
+     * @throws Exception si une erreur survient lors de la récupération des données
+     */
     @GetMapping("/contactByTypeContact")
     public String getArticlesByCategory(@RequestParam Long id, Model model,
                                         @RequestParam(defaultValue = "0") int page,

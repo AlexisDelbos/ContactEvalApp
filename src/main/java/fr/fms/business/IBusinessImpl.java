@@ -62,7 +62,7 @@ public class IBusinessImpl implements IBusiness {
     }
 
     @Override
-    public void deleteContact(Long id) throws Exception {
+    public void deleteContact(Long id) {
         contactRepository.deleteById(id);
     }
 

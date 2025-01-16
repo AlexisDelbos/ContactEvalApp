@@ -12,12 +12,23 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class LoginController {
 
-
+    /**
+     * Affiche la page de connexion
+     *
+     * @return la vue "login"
+     */
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
+    /**
+     * Gère la déconnexion de l'utilisateur
+     *
+     * @param request  la requête HTTP
+     * @param response la réponse HTTP
+     * @return redirige vers la page de connexion
+     */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -27,6 +38,11 @@ public class LoginController {
         return "redirect:/login";
     }
 
+    /**
+     * Redirige vers la page d'accueil après connexion
+     *
+     * @return la vue "landingpage"
+     */
     @GetMapping("/landingpage")
     public String redirectToLandingPage() {
         return "landingpage";
